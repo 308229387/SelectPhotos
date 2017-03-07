@@ -36,14 +36,14 @@ public class PostPhotoAdapter extends RecyclerView.Adapter<PostPhotoAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        if (position == images.size() - 1) {
+        if (position == images.size()) {
             Glide.with(context).load(R.mipmap.ic_launcher).into(holder.image);
             holder.delete.setVisibility(View.GONE);
-        }else{
-//            Glide.with(context).load(new File(images.get(position))).into(holder.image);
+        } else {
+            Glide.with(context).load(new File(images.get(position))).into(holder.image);
             holder.delete.setVisibility(View.VISIBLE);
         }
-        if (position == 0 && images.size() > 1)
+        if (position == 0 && images.size() > 0)
             holder.firstText.setVisibility(View.VISIBLE);
         else
             holder.firstText.setVisibility(View.GONE);
@@ -68,11 +68,13 @@ public class PostPhotoAdapter extends RecyclerView.Adapter<PostPhotoAdapter.View
 
     @Override
     public int getItemCount() {
-        return images == null ? 0 : images.size();
+        return images == null ? 0 : images.size() + 1;
     }
 
     public void setData(ArrayList images) {
         this.images = images;
+
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

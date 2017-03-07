@@ -30,10 +30,7 @@ import java.util.ArrayList;
 import uk.co.senab.photoview.PhotoView;
 
 /**
- * User ：LiaoJH <br/>
- * Desc ： 图片查看界面
- * <br/>
- * Date ：2016/7/30 0030 <br/>
+ *到这个界面是先会getIntent   然后判断media.isSelect   添加到路径
  */
 public class ImageActivity extends ImageBaseActivity implements ViewPager.OnPageChangeListener {
 
@@ -63,8 +60,9 @@ public class ImageActivity extends ImageBaseActivity implements ViewPager.OnPage
             finish();
             return;
         }
-
+        mSelectList.clear();
         for (Media media : mAllMediaList) {
+
             if (media != null && media.isSelect) {
                 mSelectList.add(media.path);
             }

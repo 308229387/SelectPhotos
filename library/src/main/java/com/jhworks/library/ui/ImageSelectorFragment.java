@@ -185,7 +185,7 @@ public class ImageSelectorFragment extends Fragment implements LoaderManager.Loa
                                 openImageActivity(position - 1, mode, media.path);
                             }
                         } else {
-                            openImageActivity(position - 1, mode, media.path);
+                            openImageActivity(position, mode, media.path);
                         }
                     }
 
@@ -354,7 +354,7 @@ public class ImageSelectorFragment extends Fragment implements LoaderManager.Loa
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     resultList = data.getStringArrayListExtra(Constant.KEY_EXTRA_IMAGE_SELECT_LIST);
-                    if (resultList != null && resultList.size() > 0) {
+                    if (resultList != null) {
                         mImageAdapter.setDefaultSelected(resultList);
                         if (mCallback != null) {
                             mCallback.onImageSelectList(resultList);
@@ -442,6 +442,7 @@ public class ImageSelectorFragment extends Fragment implements LoaderManager.Loa
         if (media != null) {
             if (mode == MODE_MULTI) {
                 if (resultList.contains(media.path)) {
+                    media.isSelect = false;
                     resultList.remove(media.path);
                     if (mCallback != null) {
                         mCallback.onImageUnselected(media.path);
@@ -525,4 +526,5 @@ public class ImageSelectorFragment extends Fragment implements LoaderManager.Loa
 
         void onImageSelectList(ArrayList<String> imageList);
     }
+
 }

@@ -1,11 +1,15 @@
 package com.selectphotos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.jhworks.library.ImageSelector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private PostPhotoAdapter mAdapter;
     private RecyclerView gridRecyclerView;
     private ArrayList<String> images = new ArrayList<>();
-
+    private RadioGroup mChoiceMode, mShowCamera;
+    private static final int REQUEST_IMAGE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
         toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
-        images.add("add");
-        images.add("1");
-        images.add("2");
-        images.add("3");
-        images.add("4");
-
         createAdapter();
         createPhotoView();
     }
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new PostPhotoAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if (position == images.size() - 1)
+                if (position == images.size())
                     show();
                 toast.setText(position + "");
                 toast.show();
@@ -85,10 +84,44 @@ public class MainActivity extends AppCompatActivity {
     private void selectPhoto() {
         toast.setText("相册");
         toast.show();
+        pickImage(false);
     }
 
     private void takePhoto() {
         toast.setText("拍照");
         toast.show();
+        pickImage(true);
+    }
+
+
+    private void pickImage(boolean isOpneCameraOnly) {
+        boolean showCamera = false;
+        int maxNum = 9;
+
+
+        int imageSpanCount = 3;
+
+        ImageSelector selector = ImageSelector.create();
+//        selector.single();//单张
+        selector.multi();
+        selector.origin(images)
+                .showCamera(showCamera)
+                .openCameraOnly(isOpneCameraOnly)
+                .count(maxNum)
+                .spanCount(imageSpanCount)
+                .start(MainActivity.this, REQUEST_IMAGE);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                images = data.getStringArrayListExtra(ImageSelector.EXTRA_RESULT);
+
+                mAdapter.setData(images);
+            }
+        }
     }
 }

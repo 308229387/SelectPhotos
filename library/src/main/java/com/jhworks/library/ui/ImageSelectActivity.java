@@ -23,9 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Author : LiaoJH
- * Desc :
- * Date: 2016/7/27
+ * 相册选择Activity,里面嵌套着一个Fragment
  */
 public class ImageSelectActivity extends ImageBaseActivity
         implements ImageSelectorFragment.Callback {

@@ -107,6 +107,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
      * @param resultList
      */
     public void setDefaultSelected(ArrayList<String> resultList) {
+        mSelectedImages.clear();
         for (String path : resultList) {
             Media media = getImageByPath(path);
             if (media != null) {
