@@ -2,6 +2,7 @@ package com.selectphotos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.jhworks.library.ImageSelector;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> images = new ArrayList<>();
     private RadioGroup mChoiceMode, mShowCamera;
     private static final int REQUEST_IMAGE = 2;
+    private CompressImageUtil compressImageUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
         createAdapter();
         createPhotoView();
+
+        creatBox();
+
     }
 
     private void createAdapter() {
@@ -123,5 +129,31 @@ public class MainActivity extends AppCompatActivity {
                 mAdapter.setData(images);
             }
         }
+    }
+
+    public void click(View v) {
+        compressImageUtil = new CompressImageUtil(context);
+        compressImageUtil.compress(images.get(0), new CompressImageUtil.CompressListener() {
+            @Override
+            public void onCompressSuccess(String imgPath) {
+                Toast.makeText(MainActivity.this,"压缩完毕,请去根目录查看",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCompressFailed(String imgPath, String msg) {
+                Toast.makeText(MainActivity.this,"压缩失败",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    /**
+     * 创建文件夹
+     */
+    public void creatBox(){
+        File sd= Environment.getExternalStorageDirectory();
+        String path=sd.getPath()+"/songPic";
+        File file=new File(path);
+        if(!file.exists())
+            file.mkdir();
     }
 }
